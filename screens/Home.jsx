@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,10 +10,10 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { Button } from 'react-native-paper';
+} from "react-native";
+import { Button, Portal, Dialog, TextInput } from "react-native-paper";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const HistoryItem = ({ image, title, subtitle, date }) => {
   return (
@@ -31,11 +31,51 @@ const HistoryItem = ({ image, title, subtitle, date }) => {
 };
 
 const Home = () => {
+  const [visible, setVisible] = useState(false);
+  const hideDialog = () => setVisible(false);
+  const [resumeTitle, setResumeTitle] = useState("");
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        <Portal>
+          <Dialog
+            visible={visible}
+            onDismiss={hideDialog}
+            style={{ backgroundColor: "#fff", borderRadius: 4 }}
+          >
+            <Dialog.Title style={{fontWeight:'600'}}>Create New Resume</Dialog.Title>
+            <Dialog.Content>
+              <Text style={{ fontSize: 14, color: "#333" }}>
+                Add the title of resume
+              </Text>
+
+              <TextInput
+                label="Resume title"
+                value={resumeTitle}
+                onChangeText={(text) => setResumeTitle(text)}
+                style={styles.input}
+                mode="outlined"
+              />
+            </Dialog.Content>
+
+            <Dialog.Actions>
+              <Button onPress={() => hideDialog()}>
+                <Text style={{ fontWeight: "600", color: "#000" }}>
+                  Canncel
+                </Text>
+              </Button>
+              <Button onPress={() => console.log("Ok")} style={styles.btn}>
+                <Text style={{ color: "#fff" }}>Create</Text>{" "}
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
         <View style={styles.header}>
-          <Image source={require('../assets/profile.png')} style={styles.profile} />
+          <Image
+            source={require("../assets/profile.png")}
+            style={styles.profile}
+          />
           <Text>k</Text>
         </View>
 
@@ -46,7 +86,12 @@ const Home = () => {
           </View>
 
           <TouchableOpacity style={styles.buttonContainer}>
-            <Button mode="contained" style={styles.btn} icon="folder">
+            <Button
+              mode="contained"
+              style={styles.btn}
+              icon="folder"
+              onPress={() => setVisible((prev) => !prev)}
+            >
               New Resume
             </Button>
           </TouchableOpacity>
@@ -56,61 +101,61 @@ const Home = () => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
               <View style={styles.histories}>
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
                 />
                 <HistoryItem
-                  image={require('../assets/resumeImg.webp')}
+                  image={require("../assets/resumeImg.webp")}
                   title="Graphics Designer"
                   subtitle="Professional"
                   date="5 Aug 2025"
@@ -129,16 +174,16 @@ export default Home;
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     paddingHorizontal: 10,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: width,
     padding: 10,
   },
@@ -151,28 +196,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainHeader: {
-    padding:10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   heading: {
     fontSize: 19,
-    color: '#000',
-    fontWeight: '400',
+    color: "#000",
+    fontWeight: "400",
   },
   smallHeading: {
-    color: '#017335',
-    fontWeight: '600',
+    color: "#017335",
+    fontWeight: "600",
     fontSize: 15,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 15,
   },
   btn: {
     width: width * 0.87,
-    backgroundColor: '#017335',
+    backgroundColor: "#017335",
     padding: 4,
     borderRadius: 5,
     height: 50,
@@ -185,49 +230,58 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   histories: {
-    flex:1,
+    flex: 1,
     gap: 5,
     marginTop: 10,
-    justifyContent:'center'
+    justifyContent: "center",
   },
   history: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderRadius: 4,
     padding: 5,
-    backgroundColor: '#fff',
-    shadowColor: '#eee',
+    backgroundColor: "#fff",
+    shadowColor: "#eee",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 1,
     elevation: 10,
-    width:width*0.95,
-
+    width: width * 0.95,
   },
   historyContent: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   historyText: {
     gap: 3,
   },
   historyTitle: {
-    fontWeight: '400',
+    fontWeight: "400",
     fontSize: 18,
   },
   historySubtitle: {
     fontSize: 15,
-    color: '#333',
+    color: "#333",
   },
   historyDate: {
     fontSize: 15,
-    color: '#333',
+    color: "#333",
   },
   resumeHistory: {
     width: 80,
     height: 60,
     borderRadius: 4,
+  },
+  input: {
+    marginTop: 15, // Space between input fields
+    backgroundColor: "transparent",
+  },
+  btn: {
+    backgroundColor: "#017335",
+    padding: 4,
+    borderRadius: 5,
+    color: "#fff",
   },
 });
