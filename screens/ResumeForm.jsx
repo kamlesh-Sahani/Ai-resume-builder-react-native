@@ -1,124 +1,93 @@
+import React, { useState } from "react";
 import {
-    StyleSheet,
-    Text,
-    View,
-    Platform,
-    SafeAreaView,
-    StatusBar,
-    Dimensions,
-    ScrollView,
-    TouchableOpacity,
-  } from "react-native";
-  import React, { useState } from "react";
-  import { TextInput } from "react-native-paper";
-  import Icon from 'react-native-vector-icons/MaterialIcons';
-  
-  const { width } = Dimensions.get("window");
-  
-  const ResumePersonalData = () => {
-    const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
-    const [portfolio, setPortfolio] = useState("");
-    const [github, setGithub] = useState("");
-    const [linkedin, setLinkedin] = useState("");
-  
-    const [showInput, setShowInput] = useState(false);
-  
-    return (
-      <View style={{ marginTop: 20 }}>
-        <TouchableOpacity style={{ gap: 1 }} onPress={() => setShowInput((prev) => !prev)}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.heading}>Personal Data</Text>
-            <Icon name={showInput ? "keyboard-arrow-down" : "keyboard-arrow-right"} size={30} />
-          </View>
-          <Text style={styles.subHeading}>
-            Complete your personal data to make your resume better
-          </Text>
-        </TouchableOpacity>
-  
-        {showInput && (
-          <View style={{ gap: 1, marginTop: 10, alignItems: "center" }}>
-            <TextInput
-              label="Email"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-              style={styles.input}
-              mode="outlined"
-            />
-            <TextInput
-              label="Full Name"
-              value={fullName}
-              onChangeText={(text) => setFullName(text)}
-              style={styles.input}
-              mode="outlined"
-            />
-            <TextInput
-              label="Portfolio link"
-              value={portfolio}
-              onChangeText={(text) => setPortfolio(text)}
-              style={styles.input}
-              mode="outlined"
-            />
-            <TextInput
-              label="Linkedin account"
-              value={linkedin}
-              onChangeText={(text) => setLinkedin(text)}
-              style={styles.input}
-              mode="outlined"
-            />
-            <TextInput
-              label="Github account"
-              value={github}
-              onChangeText={(text) => setGithub(text)}
-              style={styles.input}
-              mode="outlined"
-            />
-          </View>
-        )}
-      </View>
-    );
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  StatusBar
+} from "react-native";
+import {Button} from 'react-native-paper'
+import ResumePersonalData from "../components/ResumePersonal";
+import ResumeEducation from "../components/ResumeEducation";
+import ResumeWorkExperience from "../components/ResumeExperience";
+import ResumeSkills from "../components/ResumeSkills";
+import ResumeProjectData from "../components/ResumeProject";
+const {width} = Dimensions.get('window');
+const ResumeForm = () => {
+  const [personalData, setPersonalData] = useState({});
+  const [education, setEducation] = useState({});
+  const [workExperience, setWorkExperience] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [projectData, setProjectData] = useState([]);
+
+  const buttonDisable = !personalData.fullName || !personalData.email || !education.degree || !education.institution || !education.location
+  const handleSubmit = () => {
+    const resumeData = {
+      personalData,
+      education,
+      workExperience,
+      skills,
+      projectData
+    };
+    console.log(resumeData,"resumeData");
   };
-  
-  const ResumeForm = () => {
-    return (
-      <SafeAreaView style={styles.safeArea}>
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+         <View style={styles.container}>
+      <ScrollView>
         <View style={styles.container}>
-          <Text style={{ fontSize: 20, fontWeight: "500", textAlign: 'center' }}>
-            Fill in your data
-          </Text>
-          <ScrollView>
-            <View>
-              <ResumePersonalData />
-            </View>
-          </ScrollView>
+          <Text style={styles.header}>Fill in your data</Text>
+          <ResumePersonalData setPersonalData={setPersonalData} />
+          <ResumeEducation setEducation={setEducation} />
+          <ResumeProjectData setProjectData={setProjectData} />
+          <ResumeWorkExperience setWorkExperience={setWorkExperience} />
+          <ResumeSkills setSkills={setSkills} />
         </View>
-      </SafeAreaView>
-    );
-  };
-  
-  export default ResumeForm;
-  
-  const styles = StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      backgroundColor: "#fff",
-    },
-    container: {
-      flex: 1,
-      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-      paddingHorizontal: 10,
-    },
-    heading: {
-      fontSize: 19,
-      fontWeight: "500",
-    },
-    subHeading: {
-      color: "#808080",
-      fontSize: 15,
-    },
-    input: {
-      width: width * 0.87, // Full width input
-      marginBottom: 15, // Space between input fields
-    },
-  });
-  
+      </ScrollView>
+      <TouchableOpacity >
+        <Button mode="contained" style={styles.btn} onPress={handleSubmit} disabled={buttonDisable}>
+          Genearte Resume
+        </Button>
+      </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default ResumeForm;
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: "500",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  btn: {
+    width: width * 0.87,
+    backgroundColor: "#017335",
+    padding: 4,
+    borderRadius: 5,
+    color: "#fff",
+    margin:'auto'
+  },
+  container: {
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    paddingHorizontal: 10,
+  }
+});
