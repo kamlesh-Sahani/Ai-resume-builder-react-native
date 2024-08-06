@@ -12,10 +12,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button, Portal, Dialog, TextInput } from "react-native-paper";
+import {useNavigation} from '@react-navigation/native'
 
 const { width } = Dimensions.get("window");
 
 const HistoryItem = ({ image, title, subtitle, date }) => {
+
   return (
     <View style={styles.history}>
       <View style={styles.historyContent}>
@@ -34,6 +36,15 @@ const Home = () => {
   const [visible, setVisible] = useState(false);
   const hideDialog = () => setVisible(false);
   const [resumeTitle, setResumeTitle] = useState("");
+  const navigation = useNavigation();
+
+  const createResumeHandler=()=>{
+    if(!resumeTitle){
+      return;
+    }
+    hideDialog();
+    navigation.navigate('resumeForm');
+  }
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -64,7 +75,7 @@ const Home = () => {
                   Canncel
                 </Text>
               </Button>
-              <Button onPress={() => console.log("Ok")} style={styles.btn}>
+              <Button onPress={createResumeHandler} style={styles.btn}>
                 <Text style={{ color: "#fff" }}>Create</Text>{" "}
               </Button>
             </Dialog.Actions>

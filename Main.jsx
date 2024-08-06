@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 const Main = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='resumeForm' >
+      <Stack.Navigator initialRouteName='welcome' >
         <Stack.Screen name='home' component={Home} options={{headerShown:false}}/>
         <Stack.Screen name='login' component={Login} options={{headerShown:false}}/>
         <Stack.Screen name='welcome' component={Welcome} options={{headerShown:false}}/>
